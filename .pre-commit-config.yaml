@@ -1,0 +1,69 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.0.1
+    hooks:
+    -   id: trailing-whitespace
+    -   id: end-of-file-fixer
+    -   id: check-docstring-first
+    -   id: check-yaml
+    -   id: debug-statements
+
+-   repo: https://github.com/psf/black
+    rev: 21.11b1
+    hooks:
+    -   id: black
+        name: black
+        description: 'black will standardize code style in all project files in-place'
+        entry: black
+        types: [python]
+        args:
+          - --line-length=120
+
+-   repo: https://github.com/pycqa/flake8
+    rev: 4.0.1
+    hooks:
+    -   id: flake8
+        description: 'flake8 is a command-line utility for enforcing style consistency across Python projects'
+        entry: flake8
+        types: [python]
+        additional_dependencies: [flake8-typing-imports==1.10.0, pep8-naming, flake8-docstrings]
+
+-   repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v0.910-1
+    hooks:
+    -   id: mypy
+        name: mypy
+        description: 'Mypy is an optional static type checker for Python'
+        language: system
+        entry: mypy
+        types: [python]
+
+-   repo: https://github.com/pre-commit/mirrors-isort
+    rev: v5.9.3
+    hooks:
+    -   id: isort
+        name: isort
+        description: 'isort will sort python imports in a way that makes sense'
+        entry: isort
+        language: system
+        types: [python]
+
+-   repo: local
+    hooks:
+    - id: pytest
+      name: pytest
+      description: 'pytest runs unit tests contained in the ./tests folder'
+      language: system
+      entry: poetry run pytest
+      types: [python]
+      pass_filenames: false
+      always_run: true
+
+    - id: pytest_solutions
+      name: Test solutions
+      description: 'pytest runs unit tests contained in the ./2021 folder'
+      language: system
+      entry: bash -c 'python -m pytest 2021/day_**/part_*.py'
+      types: [python]
+      pass_filenames: false
+      always_run: true
