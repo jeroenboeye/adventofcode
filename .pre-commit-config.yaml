@@ -9,7 +9,7 @@ repos:
     -   id: debug-statements
 
 -   repo: https://github.com/psf/black
-    rev: 21.11b1
+    rev: 21.12b0
     hooks:
     -   id: black
         name: black
@@ -38,8 +38,8 @@ repos:
         entry: mypy
         types: [python]
 
--   repo: https://github.com/pre-commit/mirrors-isort
-    rev: v5.9.3
+-   repo: https://github.com/PyCQA/isort
+    rev: 5.10.1
     hooks:
     -   id: isort
         name: isort
