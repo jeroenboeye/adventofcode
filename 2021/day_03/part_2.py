@@ -1,4 +1,4 @@
-"""Day 3 part 1 solution."""
+"""Day 3 part 2 solution."""
 import argparse
 from pathlib import Path
 from typing import (
