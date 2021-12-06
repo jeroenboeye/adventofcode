@@ -63,7 +63,7 @@ repos:
       name: Test solutions
       description: 'pytest runs unit tests contained in the ./2021 folder'
       language: system
-      entry: bash -c 'python -m pytest 2021/day_**/part_*.py'
+      entry: bash -c 'python -m pytest 20**/day_**/part_*.py'
       types: [python]
       pass_filenames: false
       always_run: true
