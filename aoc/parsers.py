@@ -27,6 +27,6 @@ def unspaced_text_to_2d_list(text: str, dtype: Optional[Callable] = None) -> Lis
         return [[bit for bit in line] for line in text.splitlines()]
 
 
-def unspaced_text_to_2d_array(text: str) -> np.ndarray:
+def unspaced_text_to_2d_array(text: str, dtype: Optional[Callable] = None) -> np.ndarray:
     """Convert a string with newlines to a numpy array with one element per character in the string."""
-    return np.array(unspaced_text_to_2d_list(text))
+    return np.array(unspaced_text_to_2d_list(text, dtype))
