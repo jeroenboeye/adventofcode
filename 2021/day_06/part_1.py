@@ -20,10 +20,9 @@ def solve(text: str) -> int:
     """Solve the puzzle."""
     fish_age_count = parse_fish_age(text)
     for _ in range(80):
-        n_new_fish = fish_age_count.get(0, 0)
         fish_age_count = {(k - 1): v for k, v in fish_age_count.items()}
         fish_age_count[6] = fish_age_count.get(6, 0) + fish_age_count.get(-1, 0)
-        fish_age_count[8] = n_new_fish
+        fish_age_count[8] = fish_age_count.get(-1, 0)
         if -1 in fish_age_count:
             del fish_age_count[-1]
     return sum(fish_age_count.values())
