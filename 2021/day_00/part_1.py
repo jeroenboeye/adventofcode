@@ -8,7 +8,7 @@ INPUT_TXT = Path(__file__).parent / "input.txt"
 
 
 def solve(text: str) -> int:
-    """Solves the puzzle."""
+    """Solve the puzzle."""
     return 1
 
 
@@ -29,10 +29,25 @@ def main() -> int:
     """Run the solution."""
     parser = argparse.ArgumentParser()
     parser.add_argument("data_file", nargs="?", default=INPUT_TXT)
+    parser.add_argument(
+        "-s",
+        "--submit",
+        action="store_const",
+        dest="submit_solution",
+        const=True,
+        default=False,
+    )
     args = parser.parse_args()
 
     with open(args.data_file) as f:
-        print(solve(f.read()))
+        solution = solve(f.read())
+    print(solution)
+    if args.submit_solution:
+        from aocd import submit
+
+        print("Submitting solution.")
+        day = int(Path(__file__).parent.absolute().name.split("_")[1])
+        submit(solution, year=2021, day=day)
 
     return 0
 
