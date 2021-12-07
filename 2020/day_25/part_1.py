@@ -23,9 +23,9 @@ def transform_subject_nr(value: int, subject_nr: int) -> int:
 
 
 def find_secret_loop_size(public_key: int) -> int:
-    """Find the secret loop size."""
-    value = transform_subject_nr(1, 7)
-    loop_size = 1
+    """Find the secret loop size of a handshake."""
+    value = 1
+    loop_size = 0
     while value != public_key:
         value = transform_subject_nr(value, 7)
         loop_size += 1

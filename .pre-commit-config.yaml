@@ -45,7 +45,6 @@ repos:
         name: isort
         description: 'isort will sort python imports in a way that makes sense'
         entry: isort
-        language: system
         types: [python]
 
 -   repo: local
