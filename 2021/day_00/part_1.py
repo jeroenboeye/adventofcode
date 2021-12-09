@@ -46,9 +46,9 @@ def main() -> int:
         from aocd import submit
 
         print("Submitting solution.")
-        # Derive day from parent directory name, dirname should end in e.g. _01
-        day = int(Path(__file__).parent.absolute().name.split("_")[1])
-        submit(solution, year=2021, day=day)
+        # Derive year and day from parent directory name, dirname should end in e.g. /2021/day_01
+        full_path = Path(__file__).parent.absolute()
+        submit(solution, year=int(full_path.parent.name), day=int(full_path.name.split("_")[1]))
 
     return 0
 
