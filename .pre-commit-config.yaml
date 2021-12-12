@@ -58,11 +58,11 @@ repos:
       pass_filenames: false
       always_run: true
 
-    - id: pytest_solutions_2021
-      name: Test 2021 solutions
-      description: 'pytest runs unit tests contained in the ./2021 folder'
+    - id: pytest_solutions
+      name: Test solutions
+      description: 'Test solutions in the ./20** folders'
       language: system
-      entry: bash -c 'python -m pytest 2021/day_**/part_*.py'
+      entry: bash -c 'python -m pytest 20**/y_20**_day_**/part_*.py'
       types: [python]
       pass_filenames: false
       always_run: true
