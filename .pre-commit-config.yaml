@@ -62,7 +62,7 @@ repos:
       name: Test solutions
       description: 'Test solutions in the ./20** folders'
       language: system
-      entry: bash -c 'python -m pytest 20**/y_20**_day_**/part_*.py'
+      entry: bash -c 'python3 -m pytest 20**/y_20**_day_**/part_*.py'
       types: [python]
       pass_filenames: false
       always_run: true
