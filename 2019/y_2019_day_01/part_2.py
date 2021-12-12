@@ -1,41 +1,36 @@
-"""Day 6 part 2 solution."""
+"""Day 0 part 1 solution."""
 import argparse
 from pathlib import Path
-from typing import Dict
 
 import pytest
 
 INPUT_TXT = Path(__file__).parent / "input.txt"
 
 
-def parse_fish_age(text: str) -> Dict[int, int]:
-    """Parse the input."""
-    fish_age_count: Dict[int, int] = {}
-    for age in text.split(","):
-        fish_age_count[int(age)] = fish_age_count.get(int(age), 0) + 1
-    return fish_age_count
+def get_fuel_requirement(mass: int) -> int:
+    """Calculate the fuel required for a given mass."""
+    fuel = int(mass / 3) - 2
+    if fuel >= 0:
+        return mass + get_fuel_requirement(fuel)
+    else:
+        return mass
 
 
 def solve(text: str) -> int:
     """Solve the puzzle."""
-    fish_age_count = parse_fish_age(text)
-    for _ in range(256):
-        fish_age_count = {(k - 1): v for k, v in fish_age_count.items()}
-        fish_age_count[6] = fish_age_count.get(6, 0) + fish_age_count.get(-1, 0)
-        fish_age_count[8] = fish_age_count.get(-1, 0)
-        if -1 in fish_age_count:
-            del fish_age_count[-1]
-    return sum(fish_age_count.values())
+    fuel = [int(int(line) / 3) - 2 for line in text.splitlines()]
+    return sum([get_fuel_requirement(f) for f in fuel])
 
 
 INPUT_S = """\
-3,4,3,1,2
+14
+100756
 """
 
 
 @pytest.mark.parametrize(
     ("input_s", "expected"),
-    ((INPUT_S, 26984457539),),
+    ((INPUT_S, 50348),),
 )
 def test(input_s: str, expected: int) -> None:
     """Check that the solution is correct."""
@@ -63,8 +58,9 @@ def main() -> int:
         from aocd import submit
 
         print("Submitting solution.")
-        day = int(Path(__file__).parent.absolute().name.split("_")[1])
-        submit(solution, year=2021, day=day)
+        # Derive year and day from parent directory name, dirname should end in e.g. /2021/y_2021_day_01
+        full_path = Path(__file__).parent.absolute()
+        submit(solution, year=int(full_path.parent.name), day=int(full_path.name.split("_")[1]))
 
     return 0
 

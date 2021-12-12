@@ -1,4 +1,4 @@
-"""Day 7 part 1 solution."""
+"""Day 7 part 2 solution."""
 import argparse
 from pathlib import Path
 from typing import List
@@ -13,24 +13,31 @@ def sum_of_absolute_differences(numbers: List[int], value: int) -> int:
     return sum([abs(x - value) for x in numbers])
 
 
+def sum_of_absolute_triangular_differences(numbers: List[int], value: int) -> int:
+    """Sum of absolute triangular differences.
+
+    https://en.wikipedia.org/wiki/Triangular_number
+    """
+    return sum([int(abs(x - value) * (abs(x - value) + 1) / 2) for x in numbers])
+
+
 def solve(text: str) -> int:
     """Solve the puzzle."""
     locations = [int(x) for x in text.split(",")]
     midpoint = int(round(sum(locations) / len(locations)))
-    delta = sum_of_absolute_differences(locations, midpoint)
-
-    if delta > sum_of_absolute_differences(locations, midpoint + 1):
+    delta = sum_of_absolute_triangular_differences(locations, midpoint)
+    if delta > sum_of_absolute_triangular_differences(locations, midpoint + 1):
         direction = 1
         midpoint += 1
     else:
         direction = -1
         midpoint -= 1
 
-    new_delta = sum_of_absolute_differences(locations, midpoint)
+    new_delta = sum_of_absolute_triangular_differences(locations, midpoint)
     while new_delta < delta:
         delta = new_delta
         midpoint += direction
-        new_delta = sum_of_absolute_differences(locations, midpoint)
+        new_delta = sum_of_absolute_triangular_differences(locations, midpoint)
 
     return delta
 
@@ -42,7 +49,7 @@ INPUT_S = """\
 
 @pytest.mark.parametrize(
     ("input_s", "expected"),
-    ((INPUT_S, 37),),
+    ((INPUT_S, 168),),
 )
 def test(input_s: str, expected: int) -> None:
     """Check that the solution is correct."""
@@ -70,9 +77,9 @@ def main() -> int:
         from aocd import submit
 
         print("Submitting solution.")
-        # Derive day from parent directory name, dirname should end in e.g. _01
-        day = int(Path(__file__).parent.absolute().name.split("_")[1])
-        submit(solution, year=2021, day=day)
+        # Derive year and day from parent directory name, dirname should end in e.g. /2021/y_2021_day_01
+        full_path = Path(__file__).parent.absolute()
+        submit(solution, year=int(full_path.parent.name), day=int(full_path.name.split("_")[-1]))
 
     return 0
 

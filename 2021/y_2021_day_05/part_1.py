@@ -1,4 +1,4 @@
-"""Day 5 part 2 solution."""
+"""Day 5 part 1 solution."""
 import argparse
 from pathlib import Path
 from typing import (
@@ -43,8 +43,9 @@ def end_coords_to_line(coord_pair: Tuple[Coord, Coord]) -> List[Coord]:
 def solve(text: str) -> int:
     """Solve the puzzle."""
     coord_pairs: List[Tuple[Coord, Coord]] = list(line_parser(text))
+    horizontal_coord_pairs = [cp for cp in coord_pairs if cp[0][0] == cp[1][0] or cp[0][1] == cp[1][1]]
     vent_dict: Dict[Coord, int] = {}
-    for cp in coord_pairs:
+    for cp in horizontal_coord_pairs:
         line = end_coords_to_line(cp)
         for coord in line:
             vent_dict[coord] = vent_dict.get(coord, 0) + 1
@@ -67,7 +68,7 @@ INPUT_S = """\
 
 @pytest.mark.parametrize(
     ("input_s", "expected"),
-    ((INPUT_S, 12),),
+    ((INPUT_S, 5),),
 )
 def test(input_s: str, expected: int) -> None:
     """Check that the solution is correct."""
@@ -95,8 +96,9 @@ def main() -> int:
         from aocd import submit
 
         print("Submitting solution.")
-        day = int(Path(__file__).parent.absolute().name.split("_")[1])
-        submit(solution, year=2021, day=day)
+        # Derive year and day from parent directory name, dirname should end in e.g. /2021/y_2021_day_01
+        full_path = Path(__file__).parent.absolute()
+        submit(solution, year=int(full_path.parent.name), day=int(full_path.name.split("_")[-1]))
 
     return 0
 
