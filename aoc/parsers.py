@@ -22,9 +22,9 @@ def unspaced_text_to_2d_list(text: str, dtype: Optional[Callable] = None) -> Lis
     Optionally, dtype can be specified to convert the items elementwise.
     """
     if dtype is not None:
-        return [[dtype(bit) for bit in line] for line in text.splitlines()]
+        return [[dtype(value) for value in line] for line in text.splitlines()]
     else:
-        return [[bit for bit in line] for line in text.splitlines()]
+        return [[value for value in line] for line in text.splitlines()]
 
 
 def unspaced_text_to_2d_array(text: str, dtype: Optional[Callable] = None) -> np.ndarray:
