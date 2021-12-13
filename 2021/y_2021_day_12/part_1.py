@@ -24,7 +24,7 @@ def parse(text: str) -> Iterator[Tuple[str, str]]:
 def create_graph(text: str) -> Dict[str, Set[str]]:
     """Create a graph from the input."""
     graph = defaultdict(set)
-    for start, end in list(parse(text)):
+    for start, end in parse(text):
         graph[start].add(end)
         graph[end].add(start)
     return graph
