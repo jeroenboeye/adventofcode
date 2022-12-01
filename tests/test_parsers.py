@@ -1,4 +1,4 @@
-"""Test utils."""
+"""Test parsers."""
 
 from aoc.parsers import text_to_integer_array
 
