@@ -8,16 +8,16 @@ import pytest
 INPUT_TXT = Path(__file__).parent / "input.txt"
 
 
-def parse(text: str) -> Iterator[list[int]]:
+def sum_per_elf_calories(text: str) -> Iterator[int]:
     """Parse the input."""
     for elf_text in text.split("\n\n"):
-        yield [int(calories) for calories in elf_text.splitlines()]
+        yield sum([int(calories) for calories in elf_text.splitlines()])
 
 
 def solve(text: str) -> int:
     """Solve the puzzle."""
-    per_elf_items = list(parse(text))
-    top_3_elves = sorted([sum(elf_items) for elf_items in per_elf_items])[-3:]
+    per_elf_calories = list(sum_per_elf_calories(text))
+    top_3_elves = sorted(per_elf_calories)[-3:]
     return sum(top_3_elves)
 
 
