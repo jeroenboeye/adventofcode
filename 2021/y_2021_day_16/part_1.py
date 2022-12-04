@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+from dataclasses import dataclass
 from pathlib import Path
 
 import pytest
@@ -9,18 +10,41 @@ import pytest
 INPUT_TXT = Path(__file__).parent / "input.txt"
 
 
-def split_packet(packet: str) -> tuple[int, int, str]:
-    """Return version, type_id, and message."""
-    return int(packet[:3], 2), int(packet[3:6], 2), packet[6:]
+@dataclass
+class Packet:
+    """Base class for packet."""
+
+    version: int
+    type_id: int
+    start: int
 
 
-def decode_literal_value(message: str) -> str:
-    """Decode a literal value."""
-    print(message)
-    if message[0] == "0":
-        return message[1:5]
-    else:
-        return message[1:5] + decode_literal_value(message[5:])
+@dataclass
+class Operator(Packet):
+    """Child class for operator packet."""
+
+    length_type_id: str
+    n: int
+    packets: list[Packet]
+
+    def is_done(self, i: int) -> bool:
+        """Check whether operators actions are completed."""
+        if self.length_type_id == "0":
+            return i > self.start + self.n + 22  # 22 = 6 for header + 1 for length type id + 15 for length code
+        else:
+            return len(self.packets) == self.n
+
+
+@dataclass
+class LiteralValue(Packet):
+    """Child class for literal value packet."""
+
+    decoded_value: str
+
+    @property
+    def value(self) -> int:
+        """Binary to decimal transform."""
+        return int(self.decoded_value, 2)
 
 
 def hex_to_binary(hex_str: str) -> str:
@@ -31,38 +55,60 @@ def hex_to_binary(hex_str: str) -> str:
     return bin(int(hex_str, 16))[2:].zfill(n_bits)
 
 
-def unpack_length_type_0(binary_str: str) -> tuple[int, str, str]:
-    """Unpack a binary string of length type 0."""
-    length_sub_packages = int(binary_str[:15], 2)
-    sub_packages = binary_str[15 : 15 + length_sub_packages]
-    remainder = binary_str[15 + length_sub_packages :]
-    return length_sub_packages, sub_packages, remainder
+def active_operator(operators: list[Operator], i: int) -> Operator | None:
+    """Get the currently active operator."""
+    for o in operators[::-1]:
+        if not o.is_done(i):
+            return o
+    return None
 
 
-def read_transmission(binary_string: str) -> int:
+def read_transmission(binary_str: str) -> int:
     """Read the transmission."""
-    if len(binary_string) == 0 or set(binary_string) == {"0"}:
-        return 0
+    i = 0
+    packets: list[LiteralValue | Operator] = []
+    operators: list[Operator] = []
 
-    version, type_id, message = split_packet(binary_string)
-    if type_id == 4:
-        decoded_message = decode_literal_value(message)
-        # message_value = int(decoded_message, 2)
-        message_length = 5 * len(decoded_message) // 4
-        return version + read_transmission(message[message_length:])
-
-    length_type_id = message[0]
-    if length_type_id == "0":
-        length_sub_packages, sub_packages_str, remainder = unpack_length_type_0(message[1:])
-        return version + read_transmission(sub_packages_str) + read_transmission(remainder)
-    else:
-        # n_sub_packages = int(message[1:12], 2)
-        return version + read_transmission(message[12:])
+    while i == 0 or active_operator(operators, i + 1) is not None:
+        packet_start = i
+        version, type_id = int(binary_str[i : i + 3], 2), int(binary_str[i + 3 : i + 6], 2)
+        i += 6
+        if type_id == 4:
+            decoded_message = binary_str[i + 1 : i + 5]
+            while binary_str[i] == "1":
+                i += 5
+                decoded_message += binary_str[i + 1 : i + 5]
+            i += 5
+            lv = LiteralValue(version, type_id, packet_start, decoded_message)
+            packets.append(lv)
+            operator = active_operator(operators, i)
+            if operator is not None:
+                operator.packets.append(lv)
+        else:
+            length_type_id = binary_str[i]
+            i += 1
+            old_operator = active_operator(operators, i)
+            if length_type_id == "0":
+                n = int(binary_str[i : i + 15], 2)  # N characters
+                i += 15
+            else:
+                n = int(binary_str[i : i + 11], 2)  # N sub-packets
+                i += 11
+            new_operator = Operator(version, type_id, packet_start, length_type_id, n, [])
+            operators.append(new_operator)
+            packets.append(new_operator)
+            if old_operator is not None:
+                old_operator.packets.append(new_operator)
+    total_packets = 0
+    for op in operators:
+        total_packets += len(op.packets)
+        print(op.version, op.start, op.start + op.n + 22, op.length_type_id, op.n, len(op.packets))
+    print(i, total_packets, len(packets))
+    return sum([p.version for p in packets])
 
 
 def solve(text: str) -> int:
     """Solve the puzzle."""
-    # binary_string = "00111000000000000110111101000101001010010001001000000000"
     binary_string = hex_to_binary(text)
     version_sum = read_transmission(binary_string)
     return version_sum
@@ -81,40 +127,6 @@ def solve(text: str) -> int:
 def test(input_s: str, expected: int) -> None:
     """Check that the solution is correct."""
     assert solve(input_s) == expected
-
-
-# @pytest.mark.parametrize(
-#     ("input_s", "expected"),
-#     (("110100101111111000101000", 2021), ("11010001010", 10), ("0101001000100100", 20)),
-# )
-# def test_unpack_length_type_0(input_s: str, expected: int) -> None:
-
-#     pass
-
-
-@pytest.mark.parametrize(
-    ("input_s", "expected"),
-    (("110100101111111000101000", 2021), ("11010001010", 10), ("0101001000100100", 20)),
-)
-def test_decode_literal_value(input_s: str, expected: int) -> None:
-    """Check that the solution is correct."""
-    decoded_message = decode_literal_value(input_s[6:])
-    assert int(decoded_message, 2) == expected
-
-
-@pytest.mark.parametrize(
-    ("input_s", "expected"),
-    (
-        ("110100101111111000101000", (6, 4, "101111111000101000")),
-        (
-            "00111000000000000110111101000101001010010001001000000000",
-            (1, 6, "00000000000110111101000101001010010001001000000000"),
-        ),
-    ),
-)
-def test_packet_splitter(input_s: str, expected: int) -> None:
-    """Check that the solution is correct."""
-    assert split_packet(input_s) == expected
 
 
 @pytest.mark.parametrize(
@@ -143,7 +155,6 @@ def main() -> int:
         default=False,
     )
     args = parser.parse_args()
-
     with open(args.data_file) as f:
         solution = solve(f.read())
     print(solution)
