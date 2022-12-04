@@ -17,9 +17,7 @@ def solve(text: str) -> int:
     """Solve the puzzle."""
     total = 0
     for elf_pair in text.splitlines():
-        elf_1_range, elf_2_range = elf_pair.split(",")
-        elf_1_set = parse(elf_1_range)
-        elf_2_set = parse(elf_2_range)
+        elf_1_set, elf_2_set = (parse(elf_range) for elf_range in elf_pair.split(","))
         total += not elf_1_set.isdisjoint(elf_2_set)
     return total
 

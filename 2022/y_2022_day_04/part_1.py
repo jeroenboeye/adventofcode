@@ -17,9 +17,7 @@ def solve(text: str) -> int:
     """Solve the puzzle."""
     total = 0
     for elf_pair in text.splitlines():
-        elf_1_range, elf_2_range = elf_pair.split(",")
-        elf_1_set = parse(elf_1_range)
-        elf_2_set = parse(elf_2_range)
+        elf_1_set, elf_2_set = (parse(elf_range) for elf_range in elf_pair.split(","))
         if elf_1_set.issubset(elf_2_set) or elf_2_set.issubset(elf_1_set):
             total += 1
     return total
