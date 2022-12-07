@@ -16,7 +16,7 @@ def sum_per_elf_calories(text: str) -> Iterator[int]:
 
 def solve(text: str) -> int:
     """Solve the puzzle."""
-    return max(list(sum_per_elf_calories(text)))
+    return max(sum_per_elf_calories(text))
 
 
 INPUT_S = """\
