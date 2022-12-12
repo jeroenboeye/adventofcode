@@ -13,6 +13,7 @@ def solve(text: str) -> int:
 
 
 INPUT_S = """\
+
 """
 EXPECTED = 1
 
