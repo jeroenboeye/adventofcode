@@ -1,11 +1,6 @@
 """Basic utility functions."""
 
-from typing import (
-    Any,
-    Callable,
-    List,
-    Optional,
-)
+from typing import Any, Callable, List, Optional
 
 import numpy as np
 

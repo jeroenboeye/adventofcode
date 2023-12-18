@@ -2,12 +2,7 @@
 import argparse
 from collections import defaultdict
 from pathlib import Path
-from typing import (
-    Dict,
-    Iterator,
-    Set,
-    Tuple,
-)
+from typing import Dict, Iterator, Set, Tuple
 
 import pytest
 

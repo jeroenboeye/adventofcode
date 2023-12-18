@@ -2,11 +2,7 @@
 import argparse
 from dataclasses import dataclass
 from pathlib import Path
-from typing import (
-    Iterable,
-    List,
-    Set,
-)
+from typing import Iterable, List, Set
 
 import pytest
 

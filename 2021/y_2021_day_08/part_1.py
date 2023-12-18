@@ -1,12 +1,7 @@
 """Day 8 part 1 solution."""
 import argparse
 from pathlib import Path
-from typing import (
-    Iterator,
-    List,
-    Set,
-    Tuple,
-)
+from typing import Iterator, List, Set, Tuple
 
 import pytest
 
