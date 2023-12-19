@@ -1,10 +1,7 @@
 """Day 3 part 2 solution."""
 import argparse
 from pathlib import Path
-from typing import (
-    Any,
-    List,
-)
+from typing import Any, List
 
 import pytest
 

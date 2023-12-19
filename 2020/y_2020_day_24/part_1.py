@@ -1,10 +1,7 @@
 """Day 24 part 1 solution."""
 import argparse
 from pathlib import Path
-from typing import (
-    Dict,
-    Tuple,
-)
+from typing import Dict, Tuple
 
 import pytest
 
