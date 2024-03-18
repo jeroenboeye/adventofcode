@@ -1,4 +1,5 @@
 """Day 7 part 1 solution."""
+
 from __future__ import annotations
 
 import argparse
