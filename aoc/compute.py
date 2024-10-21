@@ -1,4 +1,5 @@
 """Re-usable compute functions."""
+
 import heapq as heap
 from collections import defaultdict
 from typing import Dict, List, Tuple, Union

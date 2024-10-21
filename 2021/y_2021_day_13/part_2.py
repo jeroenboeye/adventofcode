@@ -1,4 +1,5 @@
 """Day 13 part 2 solution."""
+
 import argparse
 from pathlib import Path
 from typing import Iterator, List, Set, Tuple

@@ -1,4 +1,5 @@
 """Day 2 part 2 solution."""
+
 import argparse
 from pathlib import Path
 
