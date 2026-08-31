@@ -1,4 +1,5 @@
 """Test compute module."""
+
 import pytest
 
 from aoc.compute import run_intcode
