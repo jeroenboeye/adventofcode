@@ -1,4 +1,5 @@
 """Day 6 part 1 solution."""
+
 import argparse
 from collections import deque
 from pathlib import Path

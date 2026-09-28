@@ -1,4 +1,5 @@
 """Conftest file with global fixture and pytest imports."""
+
 import pytest
 
 

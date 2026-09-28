@@ -1,4 +1,5 @@
 """Day 5 part 1 solution."""
+
 import argparse
 import re
 from collections import defaultdict
