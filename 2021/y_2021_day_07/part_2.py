@@ -1,4 +1,5 @@
 """Day 7 part 2 solution."""
+
 import argparse
 from pathlib import Path
 from typing import List
