@@ -1,4 +1,5 @@
 """Day 11 part 1 solution."""
+
 import argparse
 import re
 from dataclasses import dataclass
